@@ -3,6 +3,7 @@ import {
     Box,
     Button,
     makeStyles,
+    Modal,
     Paper,
     TextField,
     Theme,
@@ -13,6 +14,11 @@ import { useUserStore } from "../../utils/hooks/storeHooks";
 import { setUser } from "../../api/localStorage";
 
 const useStyles = makeStyles((theme: Theme) => ({
+    modal: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+    },
     root: {
         width: 400,
         height: 300,
@@ -41,7 +47,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
-export const Login: React.FC = observer(() => {
+interface LoginProps {
+    open: boolean;
+}
+
+export const Login: React.FC<LoginProps> = observer(({ open }) => {
     const classes = useStyles();
 
     const [login, setLogin] = useState("");
@@ -58,38 +68,46 @@ export const Login: React.FC = observer(() => {
     };
 
     return (
-        <Box className={classes.root}>
-            <Paper className={classes.paper} elevation={2}>
-                <form className={classes.form} noValidate autoComplete="off">
-                    <Box className={classes.fields}>
-                        <h4>Login form</h4>
-                        <TextField
-                            id="login"
-                            label="Login"
-                            variant="outlined"
-                            className={classes.textField}
-                            value={login}
-                            onChange={(event) => setLogin(event.target.value)}
-                        />
-                        <TextField
-                            id="pwd"
-                            label="Password"
-                            variant="outlined"
-                            className={classes.textField}
-                            value={pwd}
-                            onChange={(event) => setPwd(event.target.value)}
-                        />
-                    </Box>
-                    <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={onLogin}
-                        disabled={!login || !pwd}
+        <Modal open={open} className={classes.modal}>
+            <Box className={classes.root}>
+                <Paper className={classes.paper} elevation={10}>
+                    <form
+                        className={classes.form}
+                        noValidate
+                        autoComplete="off"
                     >
-                        Login
-                    </Button>
-                </form>
-            </Paper>
-        </Box>
+                        <Box className={classes.fields}>
+                            <h4>Login form</h4>
+                            <TextField
+                                id="login"
+                                label="Login"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={login}
+                                onChange={(event) =>
+                                    setLogin(event.target.value)
+                                }
+                            />
+                            <TextField
+                                id="pwd"
+                                label="Password"
+                                variant="outlined"
+                                className={classes.textField}
+                                value={pwd}
+                                onChange={(event) => setPwd(event.target.value)}
+                            />
+                        </Box>
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                            onClick={onLogin}
+                            disabled={!login || !pwd}
+                        >
+                            Login
+                        </Button>
+                    </form>
+                </Paper>
+            </Box>
+        </Modal>
     );
 });

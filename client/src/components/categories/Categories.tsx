@@ -2,7 +2,7 @@ import { Box, makeStyles, Paper, Theme } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 import React, { useEffect } from "react";
 import { useCategoriesStore } from "../../utils/hooks/storeHooks";
-import { CategoryItem } from "./category/Category";
+import { CategoryItem } from "./category/CategoryItem";
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {

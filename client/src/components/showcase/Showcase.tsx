@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { Categories } from "../categories/Categories";
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) => ({
         display: "flex",
         flexDirection: "column",
     },
-    modal: {
+    fallback: {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -37,13 +37,6 @@ export const Showcase: React.FC = observer(() => {
     const authGuard = useCallback(() => userStore.isLogged, [userStore]);
 
     const loader = <div>LOADING </div>;
-
-    const LoginForm = React.forwardRef(() => <Login />);
-
-    const showModal = useCallback(() => !userStore.isLogged && synced, [
-        userStore,
-        synced,
-    ]);
 
     useEffect(() => {
         const login = async () => {
@@ -69,30 +62,33 @@ export const Showcase: React.FC = observer(() => {
         login();
     }, []);
 
-    const showFallback = useCallback(
-        () => (synced ? <AuthFallback /> : loader),
+    const fallback = useMemo(
+        () => (
+            <Box height={1} className={classes.fallback}>
+                {synced ? <AuthFallback /> : loader}{" "}
+            </Box>
+        ),
         [synced]
     );
 
+    const showLogin = useMemo(() => !userStore.isLogged && synced, [
+        userStore,
+        synced,
+    ]);
+
     return (
         <>
-            <Modal open={showModal()} className={classes.modal}>
-                <LoginForm />
-            </Modal>
+            <Login open={showLogin} />
             <Box className={classes.root}>
                 <Home />
                 <Switch>
                     <Route
                         path="/categories"
-                        render={() =>
-                            authGuard() ? <Categories /> : showFallback()
-                        }
+                        render={() => (authGuard() ? <Categories /> : fallback)}
                     />
                     <Route
                         path="/goods"
-                        render={() =>
-                            authGuard() ? <Goods /> : showFallback()
-                        }
+                        render={() => (authGuard() ? <Goods /> : fallback)}
                     />
                     <Route
                         path="/"

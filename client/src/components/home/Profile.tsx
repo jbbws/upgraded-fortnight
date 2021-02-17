@@ -30,6 +30,7 @@ export const Profile: React.FC = observer(() => {
                 width={1}
                 height={40}
                 border={1}
+                borderRadius={5}
                 px={1}
             >
                 <Box fontSize={16}>{userStore.name}</Box>

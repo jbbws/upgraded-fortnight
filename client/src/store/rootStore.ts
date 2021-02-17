@@ -6,6 +6,7 @@ export interface RootStore {
     goods: GoodsStore;
     categories: CategoriesStore;
     user: UserStore;
+    overlay: any
 }
 
 export class RootStore implements RootStore {

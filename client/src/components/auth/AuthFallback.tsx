@@ -1,3 +1,3 @@
 export const AuthFallback = () => {
-    return <div>Auth fallback</div>;
+    return <h3>You are not allowed to see that content :)</h3>;
 };
